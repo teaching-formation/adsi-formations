@@ -64,14 +64,6 @@ export default async function HomePage({ searchParams }: { searchParams: { filtr
                 <p className="text-white/30 text-[10px]">Côte d&apos;Ivoire</p>
               </div>
             </div>
-            {/* Live indicator */}
-            <div className="flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3 py-1.5 backdrop-blur-sm">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
-              </span>
-              <span className="text-white/70 text-[11px] font-medium">En cours</span>
-            </div>
           </div>
 
           {/* Title */}
