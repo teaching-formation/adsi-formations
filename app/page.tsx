@@ -50,7 +50,7 @@ export default async function HomePage({ searchParams }: { searchParams: { filtr
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full opacity-10"
           style={{ background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-28">
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-28">
           {/* Top bar */}
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-3">
@@ -93,7 +93,7 @@ export default async function HomePage({ searchParams }: { searchParams: { filtr
       </div>
 
       {/* ── MAIN CONTENT ──────────────────────────────────────────── */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 -mt-20 pb-16 relative z-10 flex flex-col gap-5">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 -mt-20 pb-16 relative z-10 flex flex-col gap-5">
 
         {/* Stats grid — floats over hero */}
         <StatsGrid sessions={sessions} />
@@ -143,7 +143,7 @@ export default async function HomePage({ searchParams }: { searchParams: { filtr
 
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white/50 py-8 px-4 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-lg">🎓</span>
             <div>

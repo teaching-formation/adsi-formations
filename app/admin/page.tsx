@@ -110,7 +110,7 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-30 border-b"
         style={{ background: 'rgba(13,17,23,0.9)', backdropFilter: 'blur(20px)', borderColor: 'rgba(255,255,255,0.06)' }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between min-w-0">
           {/* Left: brand */}
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-sm shadow-sm">
@@ -142,14 +142,14 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                <span>Déconnexion</span>
+                <span className="hidden sm:inline">Déconnexion</span>
               </button>
             </form>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6">
 
         {/* ── KPI STRIP ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
