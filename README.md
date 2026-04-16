@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IDSI Formations 2026
 
-## Getting Started
+Dashboard de suivi du programme de formations 2026 — Association des Anciens Diplômés IDSI (Côte d'Ivoire).
 
-First, run the development server:
+## Interfaces
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Route | Accès | Description |
+|-------|-------|-------------|
+| `/` | Public (sans login) | Dashboard membres — lecture seule |
+| `/admin` | Protégé (mot de passe) | Panneau admin — édition en temps réel |
+
+> La vue publique n'expose aucun lien vers `/admin`. L'admin dispose d'un bouton "Vue publique" pour basculer.
+
+---
+
+## Stack
+
+- **Next.js 14** (App Router + Server Components + Server Actions)
+- **Supabase** (PostgreSQL, RLS)
+- **Tailwind CSS** (design system custom, pas de bibliothèque UI)
+- **Docker** (build multi-stage, image Alpine)
+
+---
+
+## 1 — Prérequis Supabase
+
+1. Créer un projet sur [supabase.com](https://supabase.com)
+2. Dans **SQL Editor**, exécuter le fichier `supabase/schema.sql`
+3. Récupérer dans **Project Settings > API** :
+   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
+   - `anon public` → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+---
+
+## 2 — Variables d'environnement
+
+Créer `.env.local` à la racine :
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+ADMIN_PASSWORD=votre_mot_de_passe
+SESSION_SECRET=chaine_aleatoire_min_32_caracteres
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3a — Développement local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+# → http://localhost:3000
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 3b — Docker
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Lancer avec docker-compose
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Variables dans .env.local (lu automatiquement par docker-compose)
+docker-compose up --build -d
 
-## Deploy on Vercel
+# Logs
+docker-compose logs -f app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Arrêter
+docker-compose down
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Build manuel
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co \
+  --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ... \
+  -t idsi-formations .
+
+docker run -p 3000:3000 \
+  -e ADMIN_PASSWORD=adsi2026 \
+  -e SESSION_SECRET=une_longue_chaine_secrete \
+  idsi-formations
+```
+
+---
+
+## 4 — Déploiement Vercel
+
+```bash
+# 1. Push sur GitHub
+# 2. Importer le repo sur vercel.com
+# 3. Ajouter les 4 variables d'env dans Settings > Environment Variables
+# 4. Deploy
+```
+
+---
+
+## Structure du projet
+
+```
+/app
+  page.tsx              ← dashboard public (server component, revalidate 60s)
+  /admin
+    page.tsx            ← login dark / dashboard admin dark
+    actions.ts          ← server actions : login, logout, updateSession
+/lib
+  supabase.ts           ← client Supabase + type Session
+  session.ts            ← cookie httpOnly 8h (natif Next.js, sans dépendance)
+/components
+  SessionCard.tsx       ← carte session vue publique
+  AdminSessionCard.tsx  ← carte éditable (client component)
+  StatsBar.tsx          ← 4 métriques colorées
+  ProgressBar.tsx       ← barre de progression avec jalons
+  PilierBadge.tsx       ← badges + couleurs par pilier
+  FilterTabs.tsx        ← filtres Toutes / Réalisées / À venir
+/supabase
+  schema.sql            ← DDL + RLS + seed 20 sessions
+Dockerfile              ← build multi-stage (deps → builder → runner Alpine)
+docker-compose.yml      ← orchestration simple
+```

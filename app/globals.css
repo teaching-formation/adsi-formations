@@ -2,26 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f1f5f9;
+    --foreground: #0f172a;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .mesh-bg {
+    background-color: #0f172a;
+    background-image:
+      radial-gradient(at 20% 20%, hsla(217, 91%, 40%, 0.4) 0px, transparent 50%),
+      radial-gradient(at 80% 10%, hsla(252, 88%, 50%, 0.3) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, hsla(217, 91%, 30%, 0.3) 0px, transparent 50%);
   }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+  }
+
+  .shadow-premium {
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.04),
+      0 2px 4px rgba(0,0,0,0.04),
+      0 8px 24px rgba(0,0,0,0.06),
+      0 24px 48px rgba(0,0,0,0.04);
+  }
+
+  .shadow-premium-hover {
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.06),
+      0 4px 8px rgba(0,0,0,0.06),
+      0 16px 40px rgba(0,0,0,0.1),
+      0 32px 64px rgba(0,0,0,0.06);
+  }
+
+  .card-done {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+  }
+
+  .card-next {
+    background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+  }
+}
+
+/* Timeline left line */
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #e2e8f0, transparent);
 }
