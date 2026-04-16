@@ -202,7 +202,7 @@ export function AdminSessionCard({ session }: { session: Session }) {
           </div>
 
           {/* Statut */}
-          <div className="flex-[2] min-w-[210px]">
+          <div className="flex-[2] min-w-[160px]">
             <FieldLabel>Statut</FieldLabel>
             <div className="flex gap-1.5">
               {statutOptions.map(opt => (
