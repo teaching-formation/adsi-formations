@@ -107,7 +107,7 @@ export default async function EvaluationPage({
                 </label>
                 <textarea
                   id="point_fort" name="point_fort" rows={3}
-                  placeholder="Le contenu, la clarté, les exemples concrets…"
+                  placeholder=""
                   className="w-full px-4 py-3 rounded-xl text-white text-sm placeholder:text-slate-600 resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
                   style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
                 />
@@ -120,7 +120,7 @@ export default async function EvaluationPage({
                 </label>
                 <textarea
                   id="suggestion" name="suggestion" rows={3}
-                  placeholder="Plus d'exemples, durée, format, thématique…"
+                  placeholder=""
                   className="w-full px-4 py-3 rounded-xl text-white text-sm placeholder:text-slate-600 resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
                   style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
                 />
