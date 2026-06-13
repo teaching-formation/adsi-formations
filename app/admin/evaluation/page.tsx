@@ -173,8 +173,7 @@ export default async function AdminEvaluationPage({
                   <form action={deleteThemeAction.bind(null, cfg.id)}>
                     <button type="submit"
                       className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
-                      style={{ color: '#475569', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
-                      onClick={e => { if (!confirm('Supprimer ce thème et toutes ses réponses ?')) e.preventDefault() }}>
+                      style={{ color: '#475569', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
                       Supprimer
                     </button>
                   </form>
