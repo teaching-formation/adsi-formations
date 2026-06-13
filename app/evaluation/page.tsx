@@ -135,14 +135,6 @@ export default async function EvaluationPage({
           </div>
         )}
 
-        <div className="mt-5 text-center">
-          <a href="/" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Retour au programme
-          </a>
-        </div>
       </div>
     </div>
   )
