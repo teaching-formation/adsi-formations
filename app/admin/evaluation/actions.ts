@@ -11,7 +11,10 @@ export async function createThemeAction(formData: FormData) {
   await supabase.from('eval_configs').update({ actif: false }).neq('id', 0)
 
   const { error } = await supabase.from('eval_configs').insert({ titre, actif: true })
-  if (error) redirect('/admin/evaluation?error=db')
+  if (error) {
+    console.error('createThemeAction error:', error.message)
+    redirect(`/admin/evaluation?error=${encodeURIComponent(error.message)}`)
+  }
 
   revalidatePath('/admin/evaluation')
   revalidatePath('/evaluation')

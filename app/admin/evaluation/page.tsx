@@ -32,7 +32,11 @@ async function getData() {
   }
 }
 
-export default async function AdminEvaluationPage() {
+export default async function AdminEvaluationPage({
+  searchParams,
+}: {
+  searchParams: { error?: string }
+}) {
   const isAuthenticated = await getAdminSession()
   if (!isAuthenticated) redirect('/admin')
 
@@ -86,6 +90,12 @@ export default async function AdminEvaluationPage() {
           <p className="text-xs mb-4" style={{ color: '#475569' }}>
             Le thème actif sera affiché sur la page publique. Un seul thème peut être actif à la fois.
           </p>
+          {searchParams?.error && (
+            <div className="mb-4 px-4 py-3 rounded-xl border text-sm"
+              style={{ background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.2)', color: '#fca5a5' }}>
+              Erreur : {decodeURIComponent(searchParams.error)}
+            </div>
+          )}
           <form action={createThemeAction} className="flex gap-3">
             <input
               name="titre"
