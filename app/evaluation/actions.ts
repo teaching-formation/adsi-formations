@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { supabase } from '@/lib/supabase'
 
 export async function submitEvaluationAction(configId: number, formData: FormData) {
@@ -23,6 +24,13 @@ export async function submitEvaluationAction(configId: number, formData: FormDat
     console.error('Evaluation insert error:', error)
     redirect('/evaluation?error=2')
   }
+
+  // Marquer comme voté pour ce thème (cookie 30 jours)
+  cookies().set(`voted_${configId}`, '1', {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+    path: '/',
+  })
 
   redirect('/evaluation/merci')
 }

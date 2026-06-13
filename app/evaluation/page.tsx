@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { submitEvaluationAction } from './actions'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,6 +23,7 @@ export default async function EvaluationPage({
   searchParams: { error?: string }
 }) {
   const config = await getActiveConfig()
+  const alreadyVoted = config ? !!cookies().get(`voted_${config.id}`) : false
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12"
@@ -53,6 +55,14 @@ export default async function EvaluationPage({
             <p className="text-4xl mb-4">🔒</p>
             <p className="text-white font-bold mb-2">Aucune évaluation en cours</p>
             <p className="text-slate-500 text-sm">L&apos;administrateur n&apos;a pas encore ouvert d&apos;évaluation.</p>
+          </div>
+        ) : alreadyVoted ? (
+          /* Déjà voté */
+          <div className="rounded-3xl border border-white/10 p-10 text-center backdrop-blur-xl"
+            style={{ background: 'rgba(255,255,255,0.05)' }}>
+            <p className="text-4xl mb-4">✅</p>
+            <p className="text-white font-bold mb-2">Vous avez déjà évalué cette session</p>
+            <p className="text-slate-500 text-sm">{config.titre}</p>
           </div>
         ) : (
           /* Formulaire */
