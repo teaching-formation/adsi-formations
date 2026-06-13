@@ -81,7 +81,7 @@ export function SessionCard({ session }: { session: Session }) {
         </div>
 
         {/* ── Speaker + YouTube ── */}
-        {(session.intervenant || (isDone && session.youtube_url)) && (
+        {(session.intervenant || (isDone && session.youtube_url) || isDone) && (
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
 
             {session.intervenant && (
@@ -151,6 +151,23 @@ export function SessionCard({ session }: { session: Session }) {
                 </svg>
               </a>
             )}
+
+            {/* Bouton évaluation — sessions réalisées uniquement */}
+            {isDone && <a
+              href={`/eval/${session.id}`}
+              className="group/ev flex items-center gap-2.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-100 hover:border-amber-200 rounded-xl px-3 py-2.5 transition-all duration-150"
+            >
+              <div className="w-7 h-7 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover/ev:scale-105 transition-transform text-sm">
+                ⭐
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] text-amber-500 font-semibold uppercase tracking-wider">Votre avis compte</p>
+                <p className="text-xs font-bold text-amber-700 truncate">Évaluer cette session</p>
+              </div>
+              <svg className="w-4 h-4 text-amber-300 group-hover/ev:translate-x-0.5 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>}
           </div>
         )}
       </div>

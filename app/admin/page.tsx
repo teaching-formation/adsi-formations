@@ -126,6 +126,11 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
 
           {/* Right: actions */}
           <div className="flex items-center gap-2">
+            <a href="/admin/evaluation"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
+              style={{ color: '#fbbf24', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.15)' }}>
+              📝 <span className="hidden sm:inline">Évaluations</span>
+            </a>
             <a href="/"
               className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
               style={{ color: '#94a3b8', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
