@@ -1,22 +1,21 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export async function createThemeAction(formData: FormData) {
   const titre = (formData.get('titre') as string).trim()
-  if (!titre) return { error: 'Titre requis' }
+  if (!titre) redirect('/admin/evaluation?error=titre')
 
-  // Désactiver tous les thèmes existants
   await supabase.from('eval_configs').update({ actif: false }).neq('id', 0)
 
-  // Créer le nouveau thème actif
   const { error } = await supabase.from('eval_configs').insert({ titre, actif: true })
-  if (error) return { error: error.message }
+  if (error) redirect('/admin/evaluation?error=db')
 
   revalidatePath('/admin/evaluation')
   revalidatePath('/evaluation')
-  return { success: true }
+  redirect('/admin/evaluation')
 }
 
 export async function toggleThemeAction(id: number, actif: boolean) {
