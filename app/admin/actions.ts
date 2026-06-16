@@ -23,7 +23,7 @@ export async function logoutAction() {
 
 export async function updateSessionAction(
   id: number,
-  field: 'titre' | 'participants' | 'statut' | 'intervenant' | 'speaker_url' | 'youtube_url' | 'slides_url',
+  field: 'titre' | 'participants' | 'statut' | 'intervenant' | 'speaker_url' | 'youtube_url' | 'slides_url' | 'mois' | 'label' | 'pilier',
   value: string | number
 ) {
   const { error } = await supabase
@@ -36,6 +36,16 @@ export async function updateSessionAction(
     throw new Error('Erreur lors de la mise à jour')
   }
 
+  revalidatePath('/')
+  revalidatePath('/admin')
+}
+
+export async function deleteSessionAction(id: number) {
+  const { error } = await supabase.from('sessions').delete().eq('id', id)
+  if (error) {
+    console.error('Delete error:', error)
+    throw new Error('Erreur lors de la suppression')
+  }
   revalidatePath('/')
   revalidatePath('/admin')
 }

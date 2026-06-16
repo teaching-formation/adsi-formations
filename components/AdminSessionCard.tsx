@@ -3,9 +3,10 @@
 import { useState, useTransition } from 'react'
 import { Session } from '@/lib/supabase'
 import { PilierBadge, pilierConfig } from './PilierBadge'
-import { updateSessionAction } from '@/app/admin/actions'
+import { updateSessionAction, deleteSessionAction } from '@/app/admin/actions'
 
 type Statut = 'upcoming' | 'next' | 'done'
+type Pilier = 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat'
 
 const statutOptions: {
   value: Statut
@@ -81,8 +82,19 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   )
 }
 
+const pilierOptions: { value: Pilier; label: string }[] = [
+  { value: 'td',             label: '🏢 TD' },
+  { value: 'data',           label: '📊 Data' },
+  { value: 'ia',             label: '🤖 IA' },
+  { value: 'soft',           label: '💡 Soft' },
+  { value: 'entrepreneuriat',label: '🚀 Entrepr.' },
+]
+
 export function AdminSessionCard({ session }: { session: Session }) {
   const [titre, setTitre]               = useState(session.titre)
+  const [mois, setMois]                 = useState(session.mois)
+  const [label, setLabel]               = useState(session.label)
+  const [pilier, setPilier]             = useState<Pilier>(session.pilier as Pilier)
   const [participants, setParticipants] = useState(session.participants ?? 0)
   const [statut, setStatut]             = useState<Statut>(session.statut as Statut)
   const [intervenant, setIntervenant]   = useState(session.intervenant ?? '')
@@ -91,8 +103,9 @@ export function AdminSessionCard({ session }: { session: Session }) {
   const [slidesUrl, setSlidesUrl]       = useState(session.slides_url ?? '')
   const [saveMsg, setSaveMsg]           = useState<'saved' | 'error' | null>(null)
   const [isPending, startTransition]    = useTransition()
+  const [deleting, setDeleting]         = useState(false)
 
-  const pc = pilierConfig[session.pilier]
+  const pc = pilierConfig[pilier]
 
   const flash = (result: 'saved' | 'error') => {
     setSaveMsg(result)
@@ -100,7 +113,7 @@ export function AdminSessionCard({ session }: { session: Session }) {
   }
 
   const save = (
-    field: 'titre' | 'participants' | 'statut' | 'intervenant' | 'speaker_url' | 'youtube_url' | 'slides_url',
+    field: 'titre' | 'participants' | 'statut' | 'intervenant' | 'speaker_url' | 'youtube_url' | 'slides_url' | 'mois' | 'label' | 'pilier',
     value: string | number,
     original: string | number | null
   ) => {
@@ -138,29 +151,96 @@ export function AdminSessionCard({ session }: { session: Session }) {
               style={{ color: '#475569', background: 'rgba(255,255,255,0.05)' }}>
               #{session.id}
             </span>
-            <PilierBadge pilier={session.pilier} />
-            <span className="text-[11px] hidden sm:inline" style={{ color: '#334155' }}>{session.label}</span>
+            <PilierBadge pilier={pilier} />
           </div>
 
-          {/* Save indicator */}
-          <div className="shrink-0 h-5 flex items-center">
-            {isPending && (
-              <div className="flex items-center gap-1.5 text-[11px]" style={{ color: '#475569' }}>
-                <div className="w-3 h-3 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
-                <span>Sauvegarde…</span>
-              </div>
-            )}
-            {!isPending && saveMsg === 'saved' && (
-              <span className="text-[11px] font-medium flex items-center gap-1" style={{ color: '#34d399' }}>
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-                Sauvegardé
-              </span>
-            )}
-            {!isPending && saveMsg === 'error' && (
-              <span className="text-[11px] font-medium" style={{ color: '#f87171' }}>⚠ Erreur</span>
-            )}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Save indicator */}
+            <div className="h-5 flex items-center">
+              {isPending && (
+                <div className="flex items-center gap-1.5 text-[11px]" style={{ color: '#475569' }}>
+                  <div className="w-3 h-3 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
+                </div>
+              )}
+              {!isPending && saveMsg === 'saved' && (
+                <span className="text-[11px] font-medium flex items-center gap-1" style={{ color: '#34d399' }}>
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              )}
+              {!isPending && saveMsg === 'error' && (
+                <span className="text-[11px] font-medium" style={{ color: '#f87171' }}>⚠</span>
+              )}
+            </div>
+
+            {/* Bouton supprimer */}
+            <button
+              onClick={() => {
+                if (!confirm(`Supprimer la session "${titre || session.label}" ?`)) return
+                setDeleting(true)
+                startTransition(async () => {
+                  try { await deleteSessionAction(session.id) }
+                  catch { setDeleting(false) }
+                })
+              }}
+              disabled={deleting}
+              className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg transition-all"
+              style={{ color: '#f87171', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}
+            >
+              {deleting
+                ? <div className="w-3 h-3 border-2 border-red-800 border-t-red-400 rounded-full animate-spin" />
+                : <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+              }
+              <span className="hidden sm:inline">Supprimer</span>
+            </button>
+          </div>
+        </div>
+
+        {/* ── Mois + Label ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <FieldLabel>Mois</FieldLabel>
+            <DarkInput
+              value={mois}
+              onChange={setMois}
+              onBlur={() => save('mois', mois, session.mois)}
+              placeholder="Ex : Juin 2026"
+            />
+          </div>
+          <div>
+            <FieldLabel>Label</FieldLabel>
+            <DarkInput
+              value={label}
+              onChange={setLabel}
+              onBlur={() => save('label', label, session.label)}
+              placeholder="Ex : Data Engineering (1/2)"
+            />
+          </div>
+        </div>
+
+        {/* ── Pilier ── */}
+        <div>
+          <FieldLabel>Pilier</FieldLabel>
+          <div className="flex gap-1.5 flex-wrap">
+            {pilierOptions.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => {
+                  setPilier(opt.value)
+                  save('pilier', opt.value, session.pilier)
+                }}
+                className="flex-1 min-w-[70px] py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-150"
+                style={pilier === opt.value
+                  ? { background: 'rgba(99,102,241,0.25)', border: '1px solid rgba(99,102,241,0.5)', color: '#a5b4fc' }
+                  : { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: '#475569' }
+                }
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
 
