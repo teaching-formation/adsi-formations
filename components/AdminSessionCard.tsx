@@ -176,13 +176,15 @@ export function AdminSessionCard({ session }: { session: Session }) {
 
             {/* Bouton supprimer */}
             <button
-              onClick={() => {
-                if (!confirm(`Supprimer la session "${titre || session.label}" ?`)) return
+              onClick={async () => {
+                if (!confirm(`Supprimer "${titre || session.label}" ?`)) return
                 setDeleting(true)
-                startTransition(async () => {
-                  try { await deleteSessionAction(session.id) }
-                  catch { setDeleting(false) }
-                })
+                try {
+                  await deleteSessionAction(session.id)
+                } catch {
+                  setDeleting(false)
+                  alert('Erreur lors de la suppression')
+                }
               }}
               disabled={deleting}
               className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg transition-all"
