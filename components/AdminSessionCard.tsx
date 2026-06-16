@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { Session } from '@/lib/supabase'
 import { PilierBadge, pilierConfig } from './PilierBadge'
 import { updateSessionAction, deleteSessionAction } from '@/app/admin/actions'
@@ -104,6 +105,7 @@ export function AdminSessionCard({ session }: { session: Session }) {
   const [saveMsg, setSaveMsg]           = useState<'saved' | 'error' | null>(null)
   const [isPending, startTransition]    = useTransition()
   const [deleting, setDeleting]         = useState(false)
+  const router = useRouter()
 
   const pc = pilierConfig[pilier]
 
@@ -181,6 +183,7 @@ export function AdminSessionCard({ session }: { session: Session }) {
                 setDeleting(true)
                 try {
                   await deleteSessionAction(session.id)
+                  router.refresh()
                 } catch {
                   setDeleting(false)
                   alert('Erreur lors de la suppression')
