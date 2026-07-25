@@ -41,10 +41,14 @@ export async function updateSessionAction(
 }
 
 export async function deleteSessionAction(id: number) {
-  const { error } = await supabase.from('sessions').delete().eq('id', id)
+  const { data, error } = await supabase.from('sessions').delete().eq('id', id).select()
   if (error) {
     console.error('Delete error:', error)
     throw new Error('Erreur lors de la suppression')
+  }
+  if (!data || data.length === 0) {
+    // RLS ou aucune ligne : rien n'a été supprimé
+    throw new Error('Suppression bloquée (aucune ligne supprimée — vérifiez les droits RLS)')
   }
   revalidatePath('/')
   revalidatePath('/admin')
