@@ -7,7 +7,7 @@ export const sql = neon(process.env.DATABASE_URL!)
 export type Session = {
   id: number
   mois: string
-  pilier: 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber'
+  pilier: 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber' | 'transfo'
   titre: string
   label: string
   statut: 'upcoming' | 'next' | 'done'

@@ -72,6 +72,16 @@ export const pilierConfig: Record<Pilier, {
     iconBg: 'bg-red-100',
     icon: '🔐',
   },
+  transfo: {
+    label: 'Transformation digitale',
+    bg: 'bg-pink-50',
+    text: 'text-pink-700',
+    dot: 'bg-pink-500',
+    border: 'border-pink-200',
+    leftBar: 'bg-pink-500',
+    iconBg: 'bg-pink-100',
+    icon: '🔄',
+  },
 }
 
 export function PilierBadge({ pilier }: { pilier: Pilier }) {

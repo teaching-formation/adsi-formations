@@ -7,7 +7,7 @@ import { PilierBadge, pilierConfig } from './PilierBadge'
 import { updateSessionAction, deleteSessionAction } from '@/app/admin/actions'
 
 type Statut = 'upcoming' | 'next' | 'done'
-type Pilier = 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber'
+type Pilier = 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber' | 'transfo'
 
 const statutOptions: {
   value: Statut
@@ -88,6 +88,7 @@ const pilierOptions: { value: Pilier; label: string }[] = [
   { value: 'data',           label: '📊 Data' },
   { value: 'ia',             label: '🤖 IA' },
   { value: 'cyber',          label: '🔐 Cyber' },
+  { value: 'transfo',        label: '🔄 Transfo' },
   { value: 'soft',           label: '💡 Soft' },
   { value: 'entrepreneuriat',label: '🚀 Entrepr.' },
 ]
