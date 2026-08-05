@@ -2,18 +2,19 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { sql } from '@/lib/db'
 
 export async function createThemeAction(formData: FormData) {
   const titre = (formData.get('titre') as string).trim()
   if (!titre) redirect('/admin/evaluation?error=titre')
 
-  await supabase.from('eval_configs').update({ actif: false }).neq('id', 0)
-
-  const { error } = await supabase.from('eval_configs').insert({ titre, actif: true })
-  if (error) {
-    console.error('createThemeAction error:', error.message)
-    redirect(`/admin/evaluation?error=${encodeURIComponent(error.message)}`)
+  try {
+    await sql`UPDATE eval_configs SET actif = false`
+    await sql`INSERT INTO eval_configs (titre, actif) VALUES (${titre}, true)`
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'db'
+    console.error('createThemeAction error:', msg)
+    redirect(`/admin/evaluation?error=${encodeURIComponent(msg)}`)
   }
 
   revalidatePath('/admin/evaluation')
@@ -23,11 +24,11 @@ export async function createThemeAction(formData: FormData) {
 
 export async function toggleThemeAction(id: number, actif: boolean) {
   if (actif) {
-    // Désactiver tous puis activer celui-ci
-    await supabase.from('eval_configs').update({ actif: false }).neq('id', 0)
-    await supabase.from('eval_configs').update({ actif: true }).eq('id', id)
+    // Désactiver tous puis activer celui-ci (un seul actif à la fois)
+    await sql`UPDATE eval_configs SET actif = false`
+    await sql`UPDATE eval_configs SET actif = true WHERE id = ${id}`
   } else {
-    await supabase.from('eval_configs').update({ actif: false }).eq('id', id)
+    await sql`UPDATE eval_configs SET actif = false WHERE id = ${id}`
   }
 
   revalidatePath('/admin/evaluation')
@@ -35,7 +36,7 @@ export async function toggleThemeAction(id: number, actif: boolean) {
 }
 
 export async function deleteThemeAction(id: number) {
-  await supabase.from('evaluations').delete().eq('config_id', id)
-  await supabase.from('eval_configs').delete().eq('id', id)
+  // ON DELETE CASCADE supprime aussi les évaluations liées
+  await sql`DELETE FROM eval_configs WHERE id = ${id}`
   revalidatePath('/admin/evaluation')
 }

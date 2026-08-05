@@ -1,5 +1,5 @@
 import { getAdminSession } from '@/lib/session'
-import { supabase } from '@/lib/supabase'
+import { sql } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import { createThemeAction, toggleThemeAction, deleteThemeAction } from './actions'
 
@@ -22,13 +22,17 @@ type Evaluation = {
 }
 
 async function getData() {
-  const [{ data: configs }, { data: evals }] = await Promise.all([
-    supabase.from('eval_configs').select('*').order('created_at', { ascending: false }),
-    supabase.from('evaluations').select('*').order('created_at', { ascending: false }),
-  ])
-  return {
-    configs: (configs ?? []) as EvalConfig[],
-    evals: (evals ?? []) as Evaluation[],
+  try {
+    const [configs, evals] = await Promise.all([
+      sql`SELECT * FROM eval_configs ORDER BY created_at DESC`,
+      sql`SELECT * FROM evaluations ORDER BY created_at DESC`,
+    ])
+    return {
+      configs: configs as EvalConfig[],
+      evals: evals as Evaluation[],
+    }
+  } catch {
+    return { configs: [] as EvalConfig[], evals: [] as Evaluation[] }
   }
 }
 

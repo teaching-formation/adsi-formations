@@ -1,4 +1,4 @@
-import { supabase, Session } from '@/lib/supabase'
+import { sql, Session } from '@/lib/db'
 import { StatsGrid } from '@/components/StatsGrid'
 import { ProgramProgress } from '@/components/ProgramProgress'
 import { SessionCard } from '@/components/SessionCard'
@@ -7,12 +7,13 @@ import { FilterTabs } from '@/components/FilterTabs'
 export const revalidate = 60
 
 async function getSessions(): Promise<Session[]> {
-  const { data, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .order('id', { ascending: true })
-  if (error) { console.error(error); return [] }
-  return data as Session[]
+  try {
+    const rows = await sql`SELECT * FROM sessions ORDER BY id ASC`
+    return rows as Session[]
+  } catch (e) {
+    console.error(e)
+    return []
+  }
 }
 
 export default async function HomePage({ searchParams }: { searchParams: { filtre?: string } }) {

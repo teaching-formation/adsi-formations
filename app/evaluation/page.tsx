@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { sql } from '@/lib/db'
 import { submitEvaluationAction } from './actions'
 import { cookies } from 'next/headers'
 
@@ -7,12 +7,12 @@ export const dynamic = 'force-dynamic'
 type EvalConfig = { id: number; titre: string; actif: boolean }
 
 async function getActiveConfig(): Promise<EvalConfig | null> {
-  const { data } = await supabase
-    .from('eval_configs')
-    .select('id, titre, actif')
-    .eq('actif', true)
-    .single()
-  return data as EvalConfig | null
+  try {
+    const rows = await sql`SELECT id, titre, actif FROM eval_configs WHERE actif = true LIMIT 1`
+    return (rows[0] as EvalConfig) ?? null
+  } catch {
+    return null
+  }
 }
 
 const EMOJIS = ['😞', '😐', '🙂', '😊', '🤩']

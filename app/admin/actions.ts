@@ -2,8 +2,14 @@
 
 import { redirect } from 'next/navigation'
 import { setAdminSession, clearAdminSession } from '@/lib/session'
-import { supabase } from '@/lib/supabase'
+import { sql } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
+
+const SESSION_FIELDS = [
+  'titre', 'participants', 'statut', 'intervenant',
+  'speaker_url', 'youtube_url', 'slides_url', 'mois', 'label', 'pilier',
+] as const
+type SessionField = (typeof SESSION_FIELDS)[number]
 
 export async function loginAction(formData: FormData) {
   const password = formData.get('password') as string
@@ -23,16 +29,18 @@ export async function logoutAction() {
 
 export async function updateSessionAction(
   id: number,
-  field: 'titre' | 'participants' | 'statut' | 'intervenant' | 'speaker_url' | 'youtube_url' | 'slides_url' | 'mois' | 'label' | 'pilier',
+  field: SessionField,
   value: string | number
 ) {
-  const { error } = await supabase
-    .from('sessions')
-    .update({ [field]: value })
-    .eq('id', id)
+  // Whitelist du nom de colonne (interpolation sûre car validée)
+  if (!SESSION_FIELDS.includes(field)) {
+    throw new Error('Champ invalide')
+  }
 
-  if (error) {
-    console.error('Update error:', error)
+  try {
+    await sql.query(`UPDATE sessions SET ${field} = $1 WHERE id = $2`, [value, id])
+  } catch (e) {
+    console.error('Update error:', e)
     throw new Error('Erreur lors de la mise à jour')
   }
 
@@ -41,14 +49,15 @@ export async function updateSessionAction(
 }
 
 export async function deleteSessionAction(id: number) {
-  const { data, error } = await supabase.from('sessions').delete().eq('id', id).select()
-  if (error) {
-    console.error('Delete error:', error)
+  let rows
+  try {
+    rows = await sql`DELETE FROM sessions WHERE id = ${id} RETURNING id`
+  } catch (e) {
+    console.error('Delete error:', e)
     throw new Error('Erreur lors de la suppression')
   }
-  if (!data || data.length === 0) {
-    // RLS ou aucune ligne : rien n'a été supprimé
-    throw new Error('Suppression bloquée (aucune ligne supprimée — vérifiez les droits RLS)')
+  if (!rows || rows.length === 0) {
+    throw new Error('Aucune session supprimée (id introuvable)')
   }
   revalidatePath('/')
   revalidatePath('/admin')

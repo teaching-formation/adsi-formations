@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Session } from '@/lib/supabase'
+import { Session } from '@/lib/db'
 import { PilierBadge, pilierConfig } from './PilierBadge'
 import { updateSessionAction, deleteSessionAction } from '@/app/admin/actions'
 

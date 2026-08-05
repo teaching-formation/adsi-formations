@@ -1,4 +1,4 @@
-import { Session } from '@/lib/supabase'
+import { Session } from '@/lib/db'
 
 type Pilier = Session['pilier']
 

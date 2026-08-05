@@ -1,14 +1,17 @@
 import { getAdminSession } from '@/lib/session'
-import { supabase, Session } from '@/lib/supabase'
+import { sql, Session } from '@/lib/db'
 import { loginAction, logoutAction } from './actions'
 import { AdminSessionCard } from '@/components/AdminSessionCard'
 
 export const dynamic = 'force-dynamic'
 
 async function getSessions(): Promise<Session[]> {
-  const { data, error } = await supabase.from('sessions').select('*').order('id', { ascending: true })
-  if (error) return []
-  return data as Session[]
+  try {
+    const rows = await sql`SELECT * FROM sessions ORDER BY id ASC`
+    return rows as Session[]
+  } catch {
+    return []
+  }
 }
 
 export default async function AdminPage({ searchParams }: { searchParams: { error?: string } }) {
