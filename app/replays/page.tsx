@@ -99,17 +99,12 @@ export default async function ReplaysPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white/50 py-8 px-4 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">🎓</span>
-            <div>
-              <p className="text-xs font-semibold text-slate-600">IDSI Formations 2026</p>
-              <p className="text-[11px] text-slate-400">Association des Anciens Diplômés IDSI · Côte d&apos;Ivoire</p>
-            </div>
+        <div className="max-w-5xl mx-auto flex items-center justify-center gap-2">
+          <span className="text-lg">🎓</span>
+          <div className="text-center">
+            <p className="text-xs font-semibold text-slate-600">IDSI Formations 2026</p>
+            <p className="text-[11px] text-slate-400">Association des Anciens Diplômés IDSI · Côte d&apos;Ivoire</p>
           </div>
-          <a href="/" className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors">
-            Voir tout le programme →
-          </a>
         </div>
       </footer>
     </div>
