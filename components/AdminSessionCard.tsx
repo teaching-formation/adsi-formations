@@ -7,7 +7,7 @@ import { PilierBadge, pilierConfig } from './PilierBadge'
 import { updateSessionAction, deleteSessionAction } from '@/app/admin/actions'
 
 type Statut = 'upcoming' | 'next' | 'done'
-type Pilier = 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber' | 'transfo'
+type Pilier = 'td' | 'data' | 'ia' | 'soft' | 'entrepreneuriat' | 'cyber'
 
 const statutOptions: {
   value: Statut
@@ -84,11 +84,10 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 const pilierOptions: { value: Pilier; label: string }[] = [
-  { value: 'td',             label: '🏢 TD' },
+  { value: 'td',             label: '🔄 Transfo. Digitale' },
   { value: 'data',           label: '📊 Data' },
   { value: 'ia',             label: '🤖 IA' },
   { value: 'cyber',          label: '🔐 Cyber' },
-  { value: 'transfo',        label: '🔄 Transfo' },
   { value: 'soft',           label: '💡 Soft' },
   { value: 'entrepreneuriat',label: '🚀 Entrepr.' },
 ]

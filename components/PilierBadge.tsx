@@ -13,14 +13,14 @@ export const pilierConfig: Record<Pilier, {
   icon: string
 }> = {
   td: {
-    label: 'Témoignages DSI',
+    label: 'Transformation Digitale',
     bg: 'bg-blue-50',
     text: 'text-blue-700',
     dot: 'bg-blue-500',
     border: 'border-blue-200',
     leftBar: 'bg-blue-500',
     iconBg: 'bg-blue-100',
-    icon: '🏢',
+    icon: '🔄',
   },
   data: {
     label: 'Data Engineering',
@@ -71,16 +71,6 @@ export const pilierConfig: Record<Pilier, {
     leftBar: 'bg-red-500',
     iconBg: 'bg-red-100',
     icon: '🔐',
-  },
-  transfo: {
-    label: 'Transformation digitale',
-    bg: 'bg-pink-50',
-    text: 'text-pink-700',
-    dot: 'bg-pink-500',
-    border: 'border-pink-200',
-    leftBar: 'bg-pink-500',
-    iconBg: 'bg-pink-100',
-    icon: '🔄',
   },
 }
 

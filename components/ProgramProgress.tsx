@@ -7,7 +7,6 @@ const pilierColors: Record<string, string> = {
   data: 'bg-emerald-500',
   ia: 'bg-violet-500',
   cyber: 'bg-red-500',
-  transfo: 'bg-pink-500',
   soft: 'bg-amber-500',
   entrepreneuriat: 'bg-teal-500',
 }
@@ -17,7 +16,6 @@ const pilierLabels: Record<string, string> = {
   data: 'Data',
   ia: 'IA',
   cyber: 'Cyber',
-  transfo: 'Transfo.',
   soft: 'Soft',
   entrepreneuriat: 'Entrepr.',
 }
@@ -32,7 +30,7 @@ export function ProgramProgress({
   const pct = total > 0 ? Math.round((done / total) * 100) : 0
 
   // Pilier breakdown
-  const piliers = ['td', 'data', 'ia', 'cyber', 'transfo', 'soft', 'entrepreneuriat']
+  const piliers = ['td', 'data', 'ia', 'cyber', 'soft', 'entrepreneuriat']
   const pilierStats = piliers.map(p => {
     const all  = sessions.filter(s => s.pilier === p)
     const done = all.filter(s => s.statut === 'done')
