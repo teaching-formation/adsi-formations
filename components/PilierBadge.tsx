@@ -62,6 +62,16 @@ export const pilierConfig: Record<Pilier, {
     iconBg: 'bg-teal-100',
     icon: '🚀',
   },
+  cyber: {
+    label: 'Cybersécurité',
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    dot: 'bg-red-500',
+    border: 'border-red-200',
+    leftBar: 'bg-red-500',
+    iconBg: 'bg-red-100',
+    icon: '🔐',
+  },
 }
 
 export function PilierBadge({ pilier }: { pilier: Pilier }) {
