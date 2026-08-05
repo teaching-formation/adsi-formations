@@ -44,13 +44,11 @@ export default async function ReplaysPage() {
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-28">
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-lg backdrop-blur-sm">
-              🎓
+            <div className="bg-white rounded-xl px-3 py-2 shadow-lg shadow-black/20 flex items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/idsi-alumni-logo.jpeg" alt="IDSI Alumni" className="h-7 w-auto" />
             </div>
-            <div>
-              <p className="text-white/50 text-[11px] font-semibold tracking-[0.15em] uppercase">Association IDSI</p>
-              <p className="text-white/30 text-[10px]">Côte d&apos;Ivoire</p>
-            </div>
+            <p className="text-white/40 text-[10px] font-medium tracking-wide">Côte d&apos;Ivoire</p>
           </div>
 
           <div className="max-w-xl">
@@ -123,8 +121,9 @@ export default async function ReplaysPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white/50 py-8 px-4 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto flex items-center justify-center gap-2">
-          <span className="text-lg">🎓</span>
+        <div className="max-w-5xl mx-auto flex items-center justify-center gap-2.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/idsi-alumni-logo.jpeg" alt="IDSI Alumni" className="h-7 w-auto" />
           <div className="text-center">
             <p className="text-xs font-semibold text-slate-600">IDSI Formations 2026</p>
             <p className="text-[11px] text-slate-400">Association des Anciens Diplômés IDSI · Côte d&apos;Ivoire</p>

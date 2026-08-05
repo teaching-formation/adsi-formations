@@ -42,8 +42,9 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
 
             {/* Brand */}
             <div className="text-center mb-8">
-              <div className="inline-flex w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl items-center justify-center text-2xl shadow-lg shadow-blue-500/25 mb-4">
-                🎓
+              <div className="inline-flex bg-white rounded-2xl px-4 py-3 items-center justify-center shadow-lg shadow-black/20 mb-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/idsi-alumni-logo.jpeg" alt="IDSI Alumni" className="h-9 w-auto" />
               </div>
               <h1 className="text-xl font-extrabold text-white tracking-tight">Espace Admin</h1>
               <p className="text-slate-400 text-sm mt-1">IDSI Formations 2026</p>
