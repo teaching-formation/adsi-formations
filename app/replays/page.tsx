@@ -23,6 +23,13 @@ export default async function ReplaysPage() {
   const totalParticipants = sessions.reduce((sum, s) => sum + (s.participants ?? 0), 0)
   const withReplay = sessions.filter(s => s.youtube_url).length
 
+  // Regroupement par mois (ordre déjà décroissant : plus récent en premier)
+  const grouped = sessions.reduce<Record<string, Session[]>>((acc, s) => {
+    if (!acc[s.mois]) acc[s.mois] = []
+    acc[s.mois].push(s)
+    return acc
+  }, {})
+
   return (
     <div className="min-h-screen bg-slate-100">
 
@@ -89,9 +96,26 @@ export default async function ReplaysPage() {
             <p className="text-slate-400 text-sm mt-1">Les replays apparaîtront ici après chaque session.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {sessions.map(session => (
-              <SessionCard key={session.id} session={session} />
+          <div className="flex flex-col gap-5">
+            {Object.entries(grouped).map(([mois, group]) => (
+              <section key={mois} className="flex flex-col gap-3">
+                {/* En-tête de mois */}
+                <div className="flex items-center gap-3 px-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-[0.12em]">{mois}</span>
+                  </div>
+                  <div className="flex-1 h-px bg-gradient-to-r from-slate-200 to-transparent" />
+                  <span className="text-[10px] font-semibold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded-full shadow-sm">
+                    {group.length} masterclass
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {group.map(session => (
+                    <SessionCard key={session.id} session={session} />
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         )}
