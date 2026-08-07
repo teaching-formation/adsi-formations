@@ -11,9 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'IDSI Formations 2026',
   description: 'Dashboard de suivi du programme de formations 2026 — Association des Anciens Diplômés IDSI, Côte d\'Ivoire',
-  icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>",
-  },
+  // Favicon : app/icon.png & app/apple-icon.png (logo IDSI Alumni carré)
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
