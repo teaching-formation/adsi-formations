@@ -5,7 +5,6 @@ import { unstable_noStore as noStore } from 'next/cache'
 export const dynamic = 'force-dynamic'
 
 const GROUPES = Array.from({ length: 11 }, (_, i) => `Jury ${i + 1}`)
-const PROMOS = ['Master 1', 'Master 2', 'Autre']
 const CAPACITE = 4
 
 async function getCounts(): Promise<Record<string, number>> {
@@ -71,13 +70,7 @@ export default async function InscriptionCandidatPage({ searchParams }: { search
               <input name="nom" required className={inputCls} style={fieldStyle} placeholder="Ex : DIALLO Mariam" />
             </div>
 
-            <div>
-              <Lbl>Promotion</Lbl>
-              <select name="promotion" defaultValue="" className={inputCls} style={fieldStyle}>
-                <option value="" disabled className="text-slate-900">Choisir…</option>
-                {PROMOS.map(p => <option key={p} value={p} className="text-slate-900">{p}</option>)}
-              </select>
-            </div>
+            <input type="hidden" name="promotion" value="Master 2" />
 
             <div>
               <Lbl>Numéro WhatsApp <span className="text-red-400">*</span></Lbl>
