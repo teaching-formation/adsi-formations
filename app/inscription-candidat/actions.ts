@@ -14,6 +14,19 @@ export async function submitCandidat(formData: FormData) {
     redirect('/inscription-candidat?error=1')
   }
 
+  // Garde-fou : refuser si le groupe a déjà 4 étudiants (lecture isolée du redirect)
+  let count = 0
+  try {
+    const rows = await sql`SELECT count(*)::int n FROM jury_candidats WHERE groupe = ${groupe}`
+    count = (rows[0] as { n: number }).n
+  } catch (e) {
+    console.error('candidat count error:', e)
+    redirect('/inscription-candidat?error=2')
+  }
+  if (count >= 4) {
+    redirect('/inscription-candidat?error=full')
+  }
+
   try {
     await sql`
       INSERT INTO jury_candidats (nom, promotion, contact, poste_vise, groupe)

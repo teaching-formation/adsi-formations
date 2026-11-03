@@ -1,9 +1,22 @@
 import { submitCandidat } from './actions'
+import { sql } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 const GROUPES = Array.from({ length: 11 }, (_, i) => `Jury ${i + 1}`)
 const PROMOS = ['Master 1', 'Master 2', 'Autre']
+const CAPACITE = 4
+
+async function getCounts(): Promise<Record<string, number>> {
+  try {
+    const rows = await sql`SELECT groupe, count(*)::int n FROM jury_candidats GROUP BY groupe`
+    const map: Record<string, number> = {}
+    for (const r of rows as { groupe: string; n: number }[]) map[r.groupe] = r.n
+    return map
+  } catch {
+    return {}
+  }
+}
 
 const fieldStyle = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }
 const inputCls =
@@ -13,7 +26,8 @@ function Lbl({ children }: { children: React.ReactNode }) {
   return <label className="block text-xs font-bold text-slate-300 uppercase tracking-widest mb-2">{children}</label>
 }
 
-export default function InscriptionCandidatPage({ searchParams }: { searchParams: { error?: string } }) {
+export default async function InscriptionCandidatPage({ searchParams }: { searchParams: { error?: string } }) {
+  const counts = await getCounts()
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12"
       style={{ background: 'linear-gradient(135deg, #0f172a 0%, #052e23 50%, #0f172a 100%)' }}>
@@ -41,7 +55,11 @@ export default function InscriptionCandidatPage({ searchParams }: { searchParams
           {searchParams?.error && (
             <div className="rounded-xl px-4 py-3 mb-6 text-sm border"
               style={{ background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.2)', color: '#fca5a5' }}>
-              {searchParams.error === '1' ? 'Merci de remplir Nom, Contact et de choisir un groupe.' : 'Une erreur est survenue, réessayez.'}
+              {searchParams.error === 'full'
+                ? 'Ce groupe est déjà complet (4/4). Merci de choisir un autre jury.'
+                : searchParams.error === '1'
+                ? 'Merci de remplir Nom, Contact et de choisir un groupe.'
+                : 'Une erreur est survenue, réessayez.'}
             </div>
           )}
 
@@ -71,18 +89,33 @@ export default function InscriptionCandidatPage({ searchParams }: { searchParams
 
             <div>
               <Lbl>Groupe de passage <span className="text-red-400">*</span></Lbl>
-              <p className="text-[11px] text-slate-500 mb-2.5">Choisis ton jury (date fixée ensuite selon les aînés).</p>
+              <p className="text-[11px] text-slate-500 mb-2.5">Choisis ton jury (date fixée ensuite selon les aînés). Les groupes complets sont grisés.</p>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {GROUPES.map(g => (
-                  <label key={g} className="cursor-pointer">
-                    <input type="radio" name="groupe" value={g} required className="sr-only peer" />
-                    <div className="text-center text-xs font-semibold py-2.5 px-1 rounded-lg border border-white/10 text-slate-400
-                      peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-200
-                      hover:border-white/30 transition-all select-none">
-                      {g}
-                    </div>
-                  </label>
-                ))}
+                {GROUPES.map(g => {
+                  const used = counts[g] ?? 0
+                  const reste = CAPACITE - used
+                  const full = reste <= 0
+                  if (full) {
+                    return (
+                      <div key={g} className="text-center rounded-lg border border-white/5 py-2 px-1 select-none opacity-50"
+                        style={{ background: 'rgba(255,255,255,0.02)' }} aria-disabled>
+                        <span className="block text-xs font-semibold text-slate-500">{g}</span>
+                        <span className="block text-[9px] font-bold text-red-400/80 uppercase">Complet</span>
+                      </div>
+                    )
+                  }
+                  return (
+                    <label key={g} className="cursor-pointer">
+                      <input type="radio" name="groupe" value={g} required className="sr-only peer" />
+                      <div className="text-center rounded-lg border border-white/10 py-2 px-1 text-slate-400
+                        peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-200
+                        hover:border-white/30 transition-all select-none">
+                        <span className="block text-xs font-semibold">{g}</span>
+                        <span className="block text-[9px] text-slate-500">{reste} place{reste > 1 ? 's' : ''}</span>
+                      </div>
+                    </label>
+                  )
+                })}
               </div>
             </div>
 

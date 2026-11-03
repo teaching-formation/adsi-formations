@@ -1,4 +1,5 @@
 import { submitJuryVolontaire } from './actions'
+import { DispoPicker } from './DispoPicker'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,9 +93,9 @@ export default function InscriptionJuryPage({ searchParams }: { searchParams: { 
             </div>
 
             <div>
-              <Lbl>Vos disponibilités (jours &amp; heures)</Lbl>
-              <textarea name="disponibilites" rows={2} className={inputCls + ' resize-none'} style={fieldStyle}
-                placeholder="Ex : Samedi après-midi, Dimanche matin, en semaine après 18h…" />
+              <Lbl>Vos disponibilités (dates &amp; plages horaires)</Lbl>
+              <p className="text-[11px] text-slate-500 mb-2.5">Ajoutez autant de créneaux que nécessaire. Les dates des jurys seront fixées selon les disponibilités.</p>
+              <DispoPicker />
             </div>
 
             <button type="submit"
