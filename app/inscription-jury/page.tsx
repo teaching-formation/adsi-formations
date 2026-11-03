@@ -4,7 +4,7 @@ import { DispoPicker } from './DispoPicker'
 export const dynamic = 'force-dynamic'
 
 const GROUPES = Array.from({ length: 11 }, (_, i) => `Jury ${i + 1}`)
-const DOMAINES = ['Data', 'IA', 'Cybersécurité', 'Management', 'RH / Recrutement', 'Autre']
+const DOMAINES = ['Data', 'IA', 'Cybersécurité', 'Management']
 
 const fieldStyle = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }
 const inputCls =
@@ -58,8 +58,8 @@ export default function InscriptionJuryPage({ searchParams }: { searchParams: { 
             </div>
 
             <div>
-              <Lbl>Contact (téléphone ou email) <span className="text-red-400">*</span></Lbl>
-              <input name="contact" required className={inputCls} style={fieldStyle} placeholder="07 00 00 00 00 / nom@mail.com" />
+              <Lbl>Numéro WhatsApp <span className="text-red-400">*</span></Lbl>
+              <input name="contact" type="tel" required className={inputCls} style={fieldStyle} placeholder="Ex : 07 00 00 00 00" />
             </div>
 
             <div>
