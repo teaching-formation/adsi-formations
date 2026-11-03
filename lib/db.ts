@@ -1,8 +1,11 @@
 import { neon } from '@neondatabase/serverless'
 
-// Client Postgres (Neon) — driver HTTP idéal pour le serverless (Vercel)
-// La connexion se réveille automatiquement, le DNS reste toujours actif.
-export const sql = neon(process.env.DATABASE_URL!)
+// Client Postgres (Neon) — driver HTTP idéal pour le serverless (Vercel).
+// `cache: 'no-store'` : le driver passe par fetch(), que Vercel met sinon en
+// cache (Data Cache persistant même entre déploiements) → lectures toujours fraîches.
+export const sql = neon(process.env.DATABASE_URL!, {
+  fetchOptions: { cache: 'no-store' },
+})
 
 export type Session = {
   id: number
