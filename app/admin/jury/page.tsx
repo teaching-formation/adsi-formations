@@ -72,11 +72,22 @@ export default async function AdminJuryPage() {
               const full = cs.length >= 4
               return (
                 <div key={g} className="rounded-xl border p-4" style={{ background: 'rgba(255,255,255,0.02)', borderColor: full ? 'rgba(52,211,153,0.25)' : 'rgba(255,255,255,0.06)' }}>
-                  <div className="flex items-center justify-between mb-2.5">
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-bold text-white">{g}</span>
                     <span className="text-[11px] font-bold px-2 py-0.5 rounded-full"
                       style={{ color: full ? '#34d399' : '#94a3b8', background: full ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.04)' }}>
-                      {cs.length}/4 étudiants
+                      {full ? 'Complet' : `${cs.length}/4 étudiants`}
+                    </span>
+                  </div>
+
+                  {/* Barre de remplissage */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-full rounded-full transition-all"
+                        style={{ width: `${Math.min(100, (cs.length / 4) * 100)}%`, background: full ? '#34d399' : '#60a5fa' }} />
+                    </div>
+                    <span className="text-[10px] font-semibold tabular-nums" style={{ color: full ? '#34d399' : '#475569' }}>
+                      {cs.length}/4
                     </span>
                   </div>
                   <div className="mb-2">
