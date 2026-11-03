@@ -1,6 +1,7 @@
 import { getAdminSession } from '@/lib/session'
 import { sql } from '@/lib/db'
 import { redirect } from 'next/navigation'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,7 @@ type Candidat = {
 }
 
 async function getData() {
+  noStore()
   try {
     const [vol, cand] = await Promise.all([
       sql`SELECT * FROM jury_volontaires ORDER BY created_at DESC`,

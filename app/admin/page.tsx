@@ -2,10 +2,12 @@ import { getAdminSession } from '@/lib/session'
 import { sql, Session } from '@/lib/db'
 import { loginAction, logoutAction } from './actions'
 import { AdminSessionCard } from '@/components/AdminSessionCard'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
 async function getSessions(): Promise<Session[]> {
+  noStore()
   try {
     const rows = await sql`SELECT * FROM sessions ORDER BY id ASC`
     return rows as Session[]

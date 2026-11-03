@@ -1,6 +1,7 @@
 import { getAdminSession } from '@/lib/session'
 import { sql } from '@/lib/db'
 import { redirect } from 'next/navigation'
+import { unstable_noStore as noStore } from 'next/cache'
 import { createThemeAction, toggleThemeAction, deleteThemeAction } from './actions'
 
 export const dynamic = 'force-dynamic'
@@ -22,6 +23,7 @@ type Evaluation = {
 }
 
 async function getData() {
+  noStore()
   try {
     const [configs, evals] = await Promise.all([
       sql`SELECT * FROM eval_configs ORDER BY created_at DESC`,

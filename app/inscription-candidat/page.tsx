@@ -1,5 +1,6 @@
 import { submitCandidat } from './actions'
 import { sql } from '@/lib/db'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,6 +9,7 @@ const PROMOS = ['Master 1', 'Master 2', 'Autre']
 const CAPACITE = 4
 
 async function getCounts(): Promise<Record<string, number>> {
+  noStore()
   try {
     const rows = await sql`SELECT groupe, count(*)::int n FROM jury_candidats GROUP BY groupe`
     const map: Record<string, number> = {}

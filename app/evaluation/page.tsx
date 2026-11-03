@@ -1,12 +1,14 @@
 import { sql } from '@/lib/db'
 import { submitEvaluationAction } from './actions'
 import { cookies } from 'next/headers'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
 type EvalConfig = { id: number; titre: string; actif: boolean }
 
 async function getActiveConfig(): Promise<EvalConfig | null> {
+  noStore()
   try {
     const rows = await sql`SELECT id, titre, actif FROM eval_configs WHERE actif = true LIMIT 1`
     return (rows[0] as EvalConfig) ?? null

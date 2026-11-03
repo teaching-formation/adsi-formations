@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { sql } from '@/lib/db'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export async function submitCandidat(formData: FormData) {
   const nom        = (formData.get('nom') as string ?? '').trim()
@@ -17,6 +18,7 @@ export async function submitCandidat(formData: FormData) {
   // Garde-fou : refuser si le groupe a déjà 4 étudiants (lecture isolée du redirect)
   let count = 0
   try {
+    noStore()
     const rows = await sql`SELECT count(*)::int n FROM jury_candidats WHERE groupe = ${groupe}`
     count = (rows[0] as { n: number }).n
   } catch (e) {
