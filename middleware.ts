@@ -16,6 +16,14 @@ const ISOLATED_HOSTS: Record<
     // La page + sa page de remerciement (après soumission du formulaire)
     allow: (p) => p === '/evaluation' || p === '/evaluation/merci',
   },
+  'jury-adsi-formations.vercel.app': {
+    root: '/inscription-jury',
+    allow: (p) => p === '/inscription-jury' || p === '/inscription-merci',
+  },
+  'candidats-adsi-formations.vercel.app': {
+    root: '/inscription-candidat',
+    allow: (p) => p === '/inscription-candidat' || p === '/inscription-merci',
+  },
 }
 
 function isAsset(pathname: string) {
