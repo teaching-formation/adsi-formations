@@ -78,8 +78,8 @@ export default async function InscriptionCandidatPage({ searchParams }: { search
             </div>
 
             <div>
-              <Lbl>Contact (téléphone ou email) <span className="text-red-400">*</span></Lbl>
-              <input name="contact" required className={inputCls} style={fieldStyle} placeholder="07 00 00 00 00 / nom@mail.com" />
+              <Lbl>Numéro WhatsApp <span className="text-red-400">*</span></Lbl>
+              <input name="contact" type="tel" required className={inputCls} style={fieldStyle} placeholder="Ex : 07 00 00 00 00" />
             </div>
 
             <div>
